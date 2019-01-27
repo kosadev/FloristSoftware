@@ -39,7 +39,6 @@ User::~User()
 
 User User::login(std::string login, std::string password, DbConnector &db) {
 	std::string query = "SELECT * FROM User WHERE User_Name='" + login + "' AND User_Password='" + std::to_string(shortcode(password)) + "'";
-	std::cout << query << std::endl;
 	MYSQL_ROW row;
 	MYSQL_RES *res = db.executeQuery(query);
 	if (row = mysql_fetch_row(res))

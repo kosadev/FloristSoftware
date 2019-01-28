@@ -38,9 +38,9 @@ void Order::showOrder(int id, DbConnector &db)
 		resultsAmount++;
 		OrderState orderState = (OrderState)atoi(row[4]);
 
-		std::cout << "\tID: " << row[0];
+		std::cout << "\n\tID: " << row[0];
 
-		std::cout << "\n\tOrder status: ";
+		std::cout << ", Order status: ";
 
 		switch (orderState) {
 		case Ordered:
@@ -60,7 +60,7 @@ void Order::showOrder(int id, DbConnector &db)
 
 void Order::showAll(DbConnector &db)
 {
-	std::string query = "SELECT * FROM Order ORDER BY Order_state";
+	std::string query = "SELECT * FROM `Order` ORDER BY `Order_state`";
 	MYSQL_ROW row;
 	MYSQL_RES *res = db.executeQuery(query);
 	int resultsAmount = 0;
@@ -68,12 +68,12 @@ void Order::showAll(DbConnector &db)
 	{
 		resultsAmount++;
 
-		OrderState orderState = (OrderState)atoi(row[4]);
+		OrderState orderState = (OrderState)atoi(row[2]);
 
 
-		std::cout << "\tID: " << row[0];
+		std::cout << "\n\tID: " << row[0];
 
-		std::cout << "\n\tOrder status: ";
+		std::cout << ", Order status: ";
 
 		switch (orderState) {
 		case Ordered:
@@ -95,7 +95,7 @@ void Order::showAll(DbConnector &db)
 
 void Order::showAll(Order::OrderState orderState, DbConnector &db)
 {
-	std::string query = "SELECT * FROM Order WHERE OrderState=" + std::to_string((int)orderState) + " ORDER BY Order_state";
+	std::string query = "SELECT * FROM `Order` WHERE `Order_state`=" + std::to_string((int)orderState) + " ORDER BY `Order_state`";
 	MYSQL_ROW row;
 	MYSQL_RES *res = db.executeQuery(query);
 	int resultsAmount = 0;
@@ -103,11 +103,11 @@ void Order::showAll(Order::OrderState orderState, DbConnector &db)
 	{
 		resultsAmount++;
 
-		OrderState orderState = (OrderState)atoi(row[4]);
+		OrderState orderState = (OrderState)atoi(row[2]);
 
-		std::cout << "\tID: " << row[0];
+		std::cout << "\n\tID: " << row[0];
 
-		std::cout << "\n\tOrder status: ";
+		std::cout << ", Order status: ";
 
 		switch (orderState) {
 		case Ordered:
@@ -157,7 +157,7 @@ void Order::showAllOrdersByUser(int userID, DbConnector &db)
 
 Order Order::getOrder(int id, DbConnector &db)
 {
-	std::string query = "SELECT * FROM Order WHERE Order_ID=" + std::to_string(id);
+	std::string query = "SELECT * FROM `Order` WHERE `Order_ID`=" + std::to_string(id);
 	MYSQL_ROW row;
 	MYSQL_RES *res = db.executeQuery(query);
 	if (row = mysql_fetch_row(res))
@@ -175,7 +175,7 @@ ModificationResult Order::confirmOrder(int id, DbConnector &db)
 
 	if (tmpOrder.getId() != -1) {
 
-		std::string query = "UPDATE Order SET Order_state='" + std::to_string(1) + "' WHERE Order_ID=" + std::to_string(id);
+		std::string query = "UPDATE `Order` SET `Order_state`=" + std::to_string(1) + " WHERE `Order_ID`=" + std::to_string(id);
 		db.executeQuery(query);
 		return ModificationResult::Successed;
 	}

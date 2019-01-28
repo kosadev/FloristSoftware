@@ -88,14 +88,36 @@ int User::isConfirmed() {
 }
 
 int User::countUsersByEmail(std::string email, DbConnector &db) {
-	return db.countRecords("User WHERE User_Name=" + email);
+	return db.countRecords("User WHERE `User_Name`='" + email + "'");
 }
 
+void User::showAll(DbConnector &db) {
+	std::string query = "SELECT * FROM User WHERE User_isAdmin=0";
+	MYSQL_ROW row;
+	MYSQL_RES *res = db.executeQuery(query);
+	int resultsAmount = 0;
+	while (row = mysql_fetch_row(res))
+	{
+		resultsAmount++;
+
+
+		std::cout << "\n\tID: " << row[0]
+			<< ", email: " << row[1]
+			<< ", hashed password: " << row[2];
+
+		if (atoi(row[4]) == 0)
+			std::cout << " - ACCOUNT NOT CONFIRMED";
+
+	}
+	if (resultsAmount == 0) {
+		std::cout << "\tThere aren't any orders" << std::endl;
+	}
+}
 
 ModificationResult User::addUser(std::string name, std::string password, DbConnector &db) {
 
 	if (countUsersByEmail(name, db) == 0) {
-		std::string query = "INSERT INTO User(User_Name, User_Password, User_isAdmin, User_isConfirmed) Values(\'"
+		std::string query = "INSERT INTO `User`(`User_Name`, `User_Password`, `User_isAdmin`, `User_isConfirmed`) Values(\'"
 			+ name + "\',\'"
 			+ std::to_string(shortcode(password)) + "\',"
 			+ std::to_string(0) + ","
@@ -105,6 +127,7 @@ ModificationResult User::addUser(std::string name, std::string password, DbConne
 		db.executeQuery(query);
 		if (db.getQueryState() == DbConnector::QueryState::Successed) {
 			return ModificationResult::Successed;
+			db.executeQuery(query);
 		}
 	}
 

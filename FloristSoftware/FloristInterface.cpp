@@ -202,3 +202,41 @@ void FloristInterface::showProducts() {
 		++index;
 	}
 }
+
+
+bool FloristInterface::confirmOrder(int orderId) {
+	
+	if (Order::getOrder(orderId, _db).getId() == -1) {
+		std::cout << "\n\tError!";
+		return false;
+	}
+
+	if (Order::confirmOrder(orderId, _db) == ModificationResult::Failed) {
+		std::cout << "\n\tError!";
+		return false;
+	}
+	else {
+		std::cout << "\n\tOrder confirmed.";
+		return true;
+	}
+}
+
+
+bool FloristInterface::addUser(std::string email, std::string password) {
+
+	if (!std::regex_match(email, std::regex("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+"))) {
+		std::cout << "\n\tWrong email format!\n";
+		return false;
+	}
+
+	if (User::addUser(email, password, _db) == ModificationResult::Failed) {
+		std::cout << "\n\tCustomer account added.\n";
+		return true;
+	}
+	else {
+		std::cout << "\n\tError occured.\n";
+		return false;
+	}
+
+	return true;
+}

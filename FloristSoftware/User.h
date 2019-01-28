@@ -22,6 +22,8 @@ public:
 	static ModificationResult changeUserPassword(std::string name, std::string password, DbConnector &db);
 	static int countUsersByEmail(std::string email, DbConnector &db);
 
+	static void showAll(DbConnector &db);
+
 	int getId();
 	std::string getLogin();
 	int isEmployee();

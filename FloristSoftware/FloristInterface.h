@@ -15,6 +15,9 @@ public:
 	bool addProductToBasket();
 	bool addOrder(int userID);
 
+	bool addUser(std::string email, std::string password);
+	bool confirmOrder(int orderId);
+
 	void showBasket(int userID);
 	void showOrdersHistory(int userID);
 	void showProducts();
